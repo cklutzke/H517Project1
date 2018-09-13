@@ -34,11 +34,25 @@
 	<script>
 
 		// TODO: How can I dynamically set the chart size?
-		var CHART_WIDTH = 800;
+		var CHART_WIDTH = 500;
 		var CHART_HEIGHT = 500;
+		
+
+		let pumps = [];
+		function drawPumps() {
+		}
+		
+		d3.csv("pumps.csv", function(data) {
+			for (let i=0; i < data.length; i++) {
+				pumps.push(
+					{x: data[i].x, y: data[i].y}
+				);
+			}
+			drawPumps();
+		});
+
 
 		var energyProduction = [];
-
 		function drawLineChart() 
 		{
 			var maxValue = d3.max(energyProduction, function(d) {
@@ -86,7 +100,6 @@
 
 		}
 			
-
 		d3.csv('energy_us.csv', function(data) 
 		{
 			for (var i=0; i<data.length; i++)
