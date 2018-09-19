@@ -20,6 +20,8 @@
 		const CHART_WIDTH = 500;
 		const CHART_HEIGHT = 500
 		
+		let s = d3.select('svg');
+		
 		let xScale = d3.scale.linear();
 		let yScale = d3.scale.linear();
 		
@@ -33,7 +35,16 @@
 						{x: data[i].x, y: data[i].y}
 					);
 				}
-				// TODO: Draw the pumps.
+				
+				s.selectAll('circle')
+					.data(pumps)
+					.enter()
+					.append('circle')
+					.style('fill', 'red')
+					.style('stroke', 'red')
+					.attr('r', 5)
+					.attr('cx', function(d) { return xScale(d.x); })
+					.attr('cy', function(d) { return yScale(d.y); });
 			});
 		}
 
@@ -43,21 +54,20 @@
 			// TODO: Set the scales based upon the data.
 			xScale.domain([0,20]).range([0, CHART_WIDTH]);
 			yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
-			let s = d3.select('svg');
 			
     		s.selectAll('line')
     			.data(streets)
     			.enter()
     			.append('line')
-    			.style('fill', 'none')
+    			.style('fill', 'white')
     			.style('stroke', 'steelblue')
-    			.style('stroke-width', '1px')
+    			.style('stroke-width', '3px')
     			.attr('x1', function(d) { return xScale(d[0].x); })
     			.attr('y1', function(d) { return yScale(d[0].y); })
     			.attr('x2', function(d) { return xScale(d[1].x); })
-    			.attr('y2', function(d) { return yScale(d[1].y); })
+    			.attr('y2', function(d) { return yScale(d[1].y); });
 				
-			//drawPumps();
+			drawPumps();
 		});
 		
 
