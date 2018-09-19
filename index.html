@@ -1,57 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>H517 - Project 1</title>
-	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 	<style>
-    	text { 
-			font-family: Arial; 
-			font-size: 15px;
-		}
-		.axis path, .axis line {
-			fill: none;
-			stroke: black;
-			shape-rendering: crispEdges;
-		}
-		.tick text {
-			fill: black;
-			font-size: 11px;
-		}
-
-		rect {
-			stroke: white;
-		}
+		// TODO: Put something here!
 	</style>
 </head>
 <body>
 
-	<svg id="main" width="600" height="600">
-		<text id='label' x='20' y='20'>Energy production for the US</text>
-		<g transform="translate(30,40)"></g>
+	<svg id="main" width="500" height="500">
+		<g></g>
 	</svg>
 
 	
-	<script>
+	<script type="text/javascript">
 
 		// TODO: How can I dynamically set the chart size?
-		var CHART_WIDTH = 500;
-		var CHART_HEIGHT = 500;
+		const CHART_WIDTH = 500;
+		const CHART_HEIGHT = 500
 		
-
+		let xScale = d3.scale.linear();
+		let yScale = d3.scale.linear();
+		
+		let streets = [];
 		let pumps = [];
-		function drawPumps() {
-		}
 		
-		d3.csv("pumps.csv", function(data) {
-			for (let i=0; i < data.length; i++) {
-				pumps.push(
-					{x: data[i].x, y: data[i].y}
-				);
-			}
-			drawPumps();
+		function drawPumps() {
+			d3.csv("pumps.csv", function(data) {
+				for (let i=0; i < data.length; i++) {
+					pumps.push(
+						{x: data[i].x, y: data[i].y}
+					);
+				}
+				// TODO: Draw the pumps.
+			});
+		}
+
+		d3.json("sample_streets.json", function(data) {
+			streets = data;
+		
+			// TODO: Set the scales based upon the data.
+			//xScale.domain([0,20]).range([0, CHART_WIDTH]);
+			//yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
+			let g = d3.select('svg').select('g');
+			
+    		g.selectAll('line')
+    			.data(streets)
+    			.enter()
+    			.append('line')
+    			.style('fill', 'none')
+    			.style('stroke', 'steelblue')
+    			.style('stroke-width', '1px')
+				/*
+    			.attr('x1', function(d) { return xScale(d[0].x); })
+    			.attr('y1', function(d) { return yScale(d[0].y); })
+    			.attr('x2', function(d) { return xScale(d[1].x); })
+    			.attr('x2', function(d) { return yScale(d[1].y); })
+				*/
+    			.attr('x1', function(d) { return d[0].x; })
+    			.attr('y1', function(d) { return d[0].y; })
+    			.attr('x2', function(d) { return d[1].x; })
+    			.attr('x2', function(d) { return d[1].y; })
+				
+			//drawPumps();
 		});
+		
 
 
+		// *** Stuff below is older code borrowed for reference.
+		
+/*
 		var energyProduction = [];
 		function drawLineChart() 
 		{
@@ -70,26 +90,6 @@
 				.y(function(d) { return yScale(d.production); });
 
 			var g = d3.select('svg').select('g');
-
-
-			var xAxis = d3.svg.axis()
-    			.scale(xScale)
-    			.orient('bottom')
-    			.tickFormat(function(d) { return "" + d; })
-
-    		var yAxis = d3.svg.axis()
-    			.scale(yScale)
-    			.orient('left');
-
-
-    		g.append('g')
-    			.attr('class', 'axis')
-    			.attr('transform', 'translate(0,' + CHART_HEIGHT + ')')
-    			.call(xAxis);
-
-    		g.append('g')
-    			.attr('class', 'axis')
-    			.call(yAxis);
 
     		g.append('path')
     			.style('fill', 'none')
@@ -121,6 +121,8 @@
 			drawLineChart();
 
 		});
+		
+*/
 		
 	</script>
 </body>
