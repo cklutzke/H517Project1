@@ -11,7 +11,6 @@
 <body>
 
 	<svg id="main" width="500" height="500">
-		<g></g>
 	</svg>
 
 	
@@ -38,31 +37,25 @@
 			});
 		}
 
-		d3.json("sample_streets.json", function(data) {
+		d3.json("streets.json", function(data) {
 			streets = data;
 		
 			// TODO: Set the scales based upon the data.
-			//xScale.domain([0,20]).range([0, CHART_WIDTH]);
-			//yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
-			let g = d3.select('svg').select('g');
+			xScale.domain([0,20]).range([0, CHART_WIDTH]);
+			yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
+			let s = d3.select('svg');
 			
-    		g.selectAll('line')
+    		s.selectAll('line')
     			.data(streets)
     			.enter()
     			.append('line')
     			.style('fill', 'none')
     			.style('stroke', 'steelblue')
     			.style('stroke-width', '1px')
-				/*
     			.attr('x1', function(d) { return xScale(d[0].x); })
     			.attr('y1', function(d) { return yScale(d[0].y); })
     			.attr('x2', function(d) { return xScale(d[1].x); })
-    			.attr('x2', function(d) { return yScale(d[1].y); })
-				*/
-    			.attr('x1', function(d) { return d[0].x; })
-    			.attr('y1', function(d) { return d[0].y; })
-    			.attr('x2', function(d) { return d[1].x; })
-    			.attr('x2', function(d) { return d[1].y; })
+    			.attr('y2', function(d) { return yScale(d[1].y); })
 				
 			//drawPumps();
 		});
