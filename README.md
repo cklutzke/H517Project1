@@ -3,10 +3,8 @@ Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
-For a C you need:
-A well drawn map of the area (streets and pumps)
-	*including the locations of the deaths
 
+For a C you need:
 a timeline graph showing the number of deaths per day
 ability to move the mouse over the timeline graph to choose which day to visualize - this should affect the deaths visible on the map and in the graph - at minimum all cholera deaths prior to that date should be shown on the map and the graph
 the graph and the map should be stable (i.e., they should not move when new data is added or removed)

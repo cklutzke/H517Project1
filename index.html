@@ -5,20 +5,35 @@
 	<title>H517 - Project 1</title>
 	<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 	<style>
-		// TODO: Put something here!
+		svg .street {
+			stroke: gray;
+			stroke-width: 1px;
+		}
+		
+		svg .pump {
+			fill: blue;
+			stroke: none;
+			r: 5;
+		}
+		
+		svg .death {
+			fill: red;
+			stroke: none;
+			r: 1;
+		}
 	</style>
 </head>
 <body>
 
-	<svg id="main" width="500" height="500">
+	<svg id="main" width="1000" height="1000">
 	</svg>
 
 	
 	<script type="text/javascript">
 
 		// TODO: How can I dynamically set the chart size?
-		const CHART_WIDTH = 500;
-		const CHART_HEIGHT = 500
+		const CHART_WIDTH = 1000;
+		const CHART_HEIGHT = 1000
 		
 		let s = d3.select('svg');
 		
@@ -27,7 +42,32 @@
 		
 		let streets = [];
 		let pumps = [];
+		let deaths = [];
 		
+		function drawDeaths() {
+			d3.csv("deaths_age_sex.csv", function(data) {
+				for (let i=0; i < data.length; i++) {
+					deaths.push(
+						{
+							x: data[i].x,
+							y: data[i].y,
+							age: data[i].age,
+							gender: data[i].gender
+						}
+					);
+				}
+				
+				s.selectAll('.death')
+					.data(deaths)
+					.enter()
+					.append('circle')
+					.attr('class', 'death')
+					.attr('cx', function(d) { return xScale(d.x); })
+					.attr('cy', function(d) { return yScale(d.y); });
+				
+			});
+		}
+
 		function drawPumps() {
 			d3.csv("pumps.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
@@ -36,18 +76,18 @@
 					);
 				}
 				
-				s.selectAll('circle')
+				s.selectAll('.pump')
 					.data(pumps)
 					.enter()
 					.append('circle')
-					.style('fill', 'red')
-					.style('stroke', 'red')
-					.attr('r', 5)
+					.attr('class', 'pump')
 					.attr('cx', function(d) { return xScale(d.x); })
 					.attr('cy', function(d) { return yScale(d.y); });
+					
+				drawDeaths();
 			});
 		}
-
+		
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
@@ -55,13 +95,11 @@
 			xScale.domain([0,20]).range([0, CHART_WIDTH]);
 			yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
 			
-    		s.selectAll('line')
+    		s.selectAll('.street')
     			.data(streets)
     			.enter()
     			.append('line')
-    			.style('fill', 'white')
-    			.style('stroke', 'steelblue')
-    			.style('stroke-width', '3px')
+				.attr('class', 'street')
     			.attr('x1', function(d) { return xScale(d[0].x); })
     			.attr('y1', function(d) { return yScale(d[0].y); })
     			.attr('x2', function(d) { return xScale(d[1].x); })
@@ -69,64 +107,7 @@
 				
 			drawPumps();
 		});
-		
-
-
-		// *** Stuff below is older code borrowed for reference.
-		
-/*
-		var energyProduction = [];
-		function drawLineChart() 
-		{
-			var maxValue = d3.max(energyProduction, function(d) {
-				return d.production;
-			});
-			var xScale = d3.scale.linear();
-			var yScale = d3.scale.linear();
-
-			xScale.domain([1980, 2012]).range([0, CHART_WIDTH]);
-			
-			yScale.domain([0, maxValue]).range([CHART_HEIGHT, 0]);
-
-			var pathGenerator = d3.svg.line()
-				.x(function(d) { return xScale(d.year); })
-				.y(function(d) { return yScale(d.production); });
-
-			var g = d3.select('svg').select('g');
-
-    		g.append('path')
-    			.style('fill', 'none')
-    			.style('stroke', 'steelblue')
-    			.style('stroke-width', '3px')
-    			.attr('d', pathGenerator(energyProduction));
-
-
-		}
-			
-		d3.csv('energy_us.csv', function(data) 
-		{
-			for (var i=0; i<data.length; i++)
-			{
-				var record = data[i];
 				
-				// loop through all years, from 1980 to 2012
-				for (var y=1980; y<=2012; y++) 
-				{
-					var value = record[y];
-					var object = {
-						year: y,
-						production: +value
-					};
-
-					energyProduction.push(object);
-				}
-			}
-			drawLineChart();
-
-		});
-		
-*/
-		
 	</script>
 </body>
 
