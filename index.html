@@ -11,7 +11,7 @@
 		}
 		
 		svg .pump {
-			fill: blue;
+			fill: black;
 			stroke: none;
 			r: 5;
 		}
@@ -19,8 +19,9 @@
 		svg .death {
 			fill: red;
 			stroke: none;
-			r: 1;
+			r: 2;
 		}
+		
 	</style>
 </head>
 <body>
@@ -44,6 +45,17 @@
 		let pumps = [];
 		let deaths = [];
 		
+		function loadDeathDays() {
+			d3.csv("deathdays.csv", function(data) {
+				let deathId = 0;
+				for (let i=0; i < data.length; i++) {
+					for (let j=0; j < +data[i].deaths; j++) {
+						deaths[deathId++].deathdate = data[i].date;
+					}
+				}
+			});
+		}
+		
 		function drawDeaths() {
 			d3.csv("deaths_age_sex.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
@@ -56,6 +68,8 @@
 						}
 					);
 				}
+				
+				loadDeathDays();
 				
 				s.selectAll('.death')
 					.data(deaths)
