@@ -8,6 +8,7 @@
 		svg .street {
 			stroke: gray;
 			stroke-width: 1px;
+			fill: none;
 		}
 		
 		svg .pump {
@@ -102,6 +103,11 @@
 			});
 		}
 		
+		let lineFunction = d3.svg.line()
+			.x(function(d) { return xScale(d.x); })
+			.y(function(d) { return yScale(d.y); })
+			.interpolate("linear");
+		
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
@@ -109,6 +115,13 @@
 			xScale.domain([0,20]).range([0, CHART_WIDTH]);
 			yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
 			
+			for (let i=0; i < streets.length; i++) {
+				s.append("path")
+					.attr("d", lineFunction(streets[i]))
+					.attr("class", "street");
+			}
+			
+			/*
     		s.selectAll('.street')
     			.data(streets)
     			.enter()
@@ -118,6 +131,7 @@
     			.attr('y1', function(d) { return yScale(d[0].y); })
     			.attr('x2', function(d) { return xScale(d[1].x); })
     			.attr('y2', function(d) { return yScale(d[1].y); });
+			*/
 				
 			drawPumps();
 		});
