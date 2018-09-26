@@ -27,41 +27,45 @@
 </head>
 <body>
 
-	<svg id="map" width="500px" height="500px">
+	<svg id="map" width="400px" height="400px">
+		<rect id="mapBorder" x="0" y="0" width="400" height="400" stroke-width="1" stroke="black" fill="none"/>
 	</svg>
-	<svg id="graph" width="500px" height="500px">
+	<svg id="graph" width="400px" height="400px">
+		<rect id="graphBorder" x="0" y="0" width="400" height="400" stroke-width="1" stroke="black" fill="none"/>
+		<text id='label' x='20' y='20'>Deaths per day</text>
 	</svg>
 
 	
 	<script type="text/javascript">
 	
 		// TODO: Can I make the size of the SVGs responsive?
+		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
 	
 		let map = d3.select("svg#map");
-		
-		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
-		let mapHeight = parseInt(map.style("height"));
 		let mapWidth = parseInt(map.style("width"));
-		
+		let mapHeight = parseInt(map.style("height"));
 		let mapXScale = d3.scale.linear();
 		let mapYScale = d3.scale.linear();
 		
+		let graph = d3.select("svg#graph");
+		let graphWidth = parseInt(graph.style("width"));
+		let graphHeight = parseInt(graph.style("height"));
+		let graphXScale = d3.scale.linear();
+		let graphYScale = d3.scale.linear();
+		
 		let streets = [];
 		let pumps = [];
+		
+		let deathDays = [];
 		let deaths = [];
+		let maxDeaths = 0;
 		
-		function loadDeathDays() {
-			d3.csv("deathdays.csv", function(data) {
-				let deathId = 0;
-				for (let i=0; i < data.length; i++) {
-					for (let j=0; j < +data[i].deaths; j++) {
-						deaths[deathId++].deathdate = data[i].date;
-					}
-				}
-			});
-		}
-		
+		// Load the death data and add it to the map and the graph.
 		function drawDeaths() {
+		
+			// Load the coordinates and demographics for each death. These are
+			// assumed to be provided in the order in which the victim died, for
+			// purposes of correlating to deathdays.csv.
 			d3.csv("deaths_age_sex.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
 					deaths.push(
@@ -74,19 +78,83 @@
 					);
 				}
 				
-				loadDeathDays();
+				// Load the number of deaths for each date, and update
+				// each death record with the day and date on which it occurred.
+				d3.csv("deathdays.csv", function(data) {
+					let deathId = 0;
+					for (let day = 0; day < data.length; day++) {
+					
+						let deathCount = +data[day].deaths;
+						
+						deathDays.push ({
+							day: day,
+							deathdate: data[day].date,
+							count: deathCount
+						});
+						
+						if (maxDeaths < deathCount) {
+							maxDeaths = deathCount;
+						}
+						
+						for (let i=0; i < deathCount; i++) {
+							deaths[deathId].deathday = day;
+							deaths[deathId].deathdate = data[day].date;
+							deathId++;
+						}
+					}
 				
-				map.selectAll('.death')
-					.data(deaths)
-					.enter()
-					.append('circle')
-					.attr('class', 'death')
-					.attr('cx', function(d) { return mapXScale(d.x); })
-					.attr('cy', function(d) { return mapYScale(d.y); });
+					// Draw each death on the map.
+					map.selectAll('.death')
+						.data(deaths)
+						.enter()
+						.append('circle')
+						.attr('class', 'death')
+						.attr('cx', function(d) { return mapXScale(d.x); })
+						.attr('cy', function(d) { return mapYScale(d.y); });
+					
+					// Draw the deaths on the graph.
+					graphXScale.domain([0, data.length-1]).range([0, graphWidth]);
+					graphYScale.domain([0, maxDeaths]).range([graphHeight, 0]);
+
+					let graphPathGenerator = d3.svg.line()
+						.x(function(d) { return graphXScale(d.day); })
+						.y(function(d) { return graphYScale(d.count); });
+
+					graph.append('path')
+						.style('fill', 'none')
+						.style('stroke', 'steelblue')
+						.style('stroke-width', '3px')
+						.attr('d', graphPathGenerator(deathDays));
+						
+	/*
+			var xAxis = d3.svg.axis()
+    			.scale(xScale)
+    			.orient('bottom')
+    			.tickFormat(function(d) { return "" + d; })
+
+    		var yAxis = d3.svg.axis()
+    			.scale(yScale)
+    			.orient('left');
+
+
+    		g.append('g')
+    			.attr('class', 'axis')
+    			.attr('transform', 'translate(0,' + CHART_HEIGHT + ')')
+    			.call(xAxis);
+
+    		g.append('g')
+    			.attr('class', 'axis')
+    			.call(yAxis);
+
+*/
+					
+					
+				});
 				
 			});
 		}
 
+		// Load and draw the water pumps.
 		function drawPumps() {
 			d3.csv("pumps.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
@@ -103,19 +171,19 @@
 					.attr('cx', function(d) { return mapXScale(d.x); })
 					.attr('cy', function(d) { return mapYScale(d.y); });
 					
-				drawDeaths();
 			});
 		}
 		
+		// Provide a means of drawing the map lines at scale.
 		let lineFunction = d3.svg.line()
 			.x(function(d) { return mapXScale(d.x); })
 			.y(function(d) { return mapYScale(d.y); })
 			.interpolate("linear");
 		
+		// Start the process by loading and drawing the map.
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
-			// TODO: Set the scales based upon the data.
 			mapXScale.domain([0,20]).range([0, mapWidth]);
 			mapYScale.domain([0,20]).range([mapHeight, 0]);
 			
@@ -126,7 +194,9 @@
 			}
 			
 			drawPumps();
+			drawDeaths();
 		});
+		
 				
 	</script>
 </body>

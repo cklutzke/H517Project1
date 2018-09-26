@@ -6,7 +6,7 @@ TODO:
 
 For a C you need:
 a timeline graph showing the number of deaths per day
-	Add line graph code from class example
+	Add axes to the graph.
 	
 ability to move the mouse over the timeline graph to choose which day to visualize - this should affect the deaths visible on the map and in the graph - at minimum all cholera deaths prior to that date should be shown on the map and the graph
 the graph and the map should be stable (i.e., they should not move when new data is added or removed)
@@ -25,3 +25,5 @@ For an A you need to add:
 ability to cluster the data on the map into a grid that shows the number of dead in each grid cell (even with this small amount of data the points are starting to overwhelm) and the user should be able to vary the size of the clusters.
 ability to show data from a window of days on the timeline graph
 ability to zoom in/out and pan around the map
+
+Presentation must be 4 minutes with 45 seconds Q&A.
