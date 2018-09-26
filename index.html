@@ -27,20 +27,24 @@
 </head>
 <body>
 
-	<svg id="main" width="1000" height="1000">
+	<svg id="map" width="500px" height="500px">
+	</svg>
+	<svg id="graph" width="500px" height="500px">
 	</svg>
 
 	
 	<script type="text/javascript">
-
-		// TODO: How can I dynamically set the chart size?
-		const CHART_WIDTH = 1000;
-		const CHART_HEIGHT = 1000
+	
+		// TODO: Can I make the size of the SVGs responsive?
+	
+		let map = d3.select("svg#map");
 		
-		let s = d3.select('svg');
+		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
+		let mapHeight = parseInt(map.style("height"));
+		let mapWidth = parseInt(map.style("width"));
 		
-		let xScale = d3.scale.linear();
-		let yScale = d3.scale.linear();
+		let mapXScale = d3.scale.linear();
+		let mapYScale = d3.scale.linear();
 		
 		let streets = [];
 		let pumps = [];
@@ -72,13 +76,13 @@
 				
 				loadDeathDays();
 				
-				s.selectAll('.death')
+				map.selectAll('.death')
 					.data(deaths)
 					.enter()
 					.append('circle')
 					.attr('class', 'death')
-					.attr('cx', function(d) { return xScale(d.x); })
-					.attr('cy', function(d) { return yScale(d.y); });
+					.attr('cx', function(d) { return mapXScale(d.x); })
+					.attr('cy', function(d) { return mapYScale(d.y); });
 				
 			});
 		}
@@ -91,48 +95,36 @@
 					);
 				}
 				
-				s.selectAll('.pump')
+				map.selectAll('.pump')
 					.data(pumps)
 					.enter()
 					.append('circle')
 					.attr('class', 'pump')
-					.attr('cx', function(d) { return xScale(d.x); })
-					.attr('cy', function(d) { return yScale(d.y); });
+					.attr('cx', function(d) { return mapXScale(d.x); })
+					.attr('cy', function(d) { return mapYScale(d.y); });
 					
 				drawDeaths();
 			});
 		}
 		
 		let lineFunction = d3.svg.line()
-			.x(function(d) { return xScale(d.x); })
-			.y(function(d) { return yScale(d.y); })
+			.x(function(d) { return mapXScale(d.x); })
+			.y(function(d) { return mapYScale(d.y); })
 			.interpolate("linear");
 		
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
 			// TODO: Set the scales based upon the data.
-			xScale.domain([0,20]).range([0, CHART_WIDTH]);
-			yScale.domain([0,20]).range([CHART_HEIGHT, 0]);
+			mapXScale.domain([0,20]).range([0, mapWidth]);
+			mapYScale.domain([0,20]).range([mapHeight, 0]);
 			
 			for (let i=0; i < streets.length; i++) {
-				s.append("path")
+				map.append("path")
 					.attr("d", lineFunction(streets[i]))
 					.attr("class", "street");
 			}
 			
-			/*
-    		s.selectAll('.street')
-    			.data(streets)
-    			.enter()
-    			.append('line')
-				.attr('class', 'street')
-    			.attr('x1', function(d) { return xScale(d[0].x); })
-    			.attr('y1', function(d) { return yScale(d[0].y); })
-    			.attr('x2', function(d) { return xScale(d[1].x); })
-    			.attr('y2', function(d) { return yScale(d[1].y); });
-			*/
-				
 			drawPumps();
 		});
 				
