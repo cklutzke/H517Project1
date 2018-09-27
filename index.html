@@ -77,6 +77,8 @@
 		let graphYScale = d3.scale.linear();
 		let padding = 30;
 		
+		let ageRange = ["0-10","11-20","21-40","41-60","61-80","> 80"]
+		
 		let streets = [];
 		let pumps = [];
 		
@@ -96,7 +98,7 @@
 						{
 							x: data[i].x,
 							y: data[i].y,
-							ageRange: data[i].age,
+							ageRange: +data[i].age,
 							gender: +data[i].gender==1 ? "female" : "male"
 						}
 					);
@@ -139,7 +141,13 @@
 								"deathday" + d.deathday;
 						})
 						.attr('cx', function(d) { return mapXScale(d.x); })
-						.attr('cy', function(d) { return mapYScale(d.y); });
+						.attr('cy', function(d) { return mapYScale(d.y); })
+						.append("title")
+						.text(function(d) {
+							return d.gender + "\r\n" +
+								"age " + ageRange[d.ageRange] + "\r\n" +
+								"died " + d.deathdate;
+						});
 						
 					// Draw the deaths on the graph.
 					graphXScale.domain([0, data.length-1]).range([padding, graphWidth - padding]);
