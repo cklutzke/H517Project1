@@ -30,8 +30,8 @@
 	<svg id="map" width="400px" height="400px">
 		<rect id="mapBorder" x="0" y="0" width="400" height="400" stroke-width="1" stroke="black" fill="none"/>
 	</svg>
-	<svg id="graph" width="400px" height="400px">
-		<rect id="graphBorder" x="0" y="0" width="400" height="400" stroke-width="1" stroke="black" fill="none"/>
+	<svg id="graph" width="600px" height="400px">
+		<rect id="graphBorder" x="0" y="0" width="600" height="400" stroke-width="1" stroke="black" fill="none"/>
 		<text id='label' x='20' y='20'>Deaths per day</text>
 	</svg>
 
@@ -128,11 +128,10 @@
 						
 					//Create hover bars
 					let graphXScaleBand = d3.scale.ordinal()
-						.domain([0, data.length-1])
-						.rangeRoundBands([0, graphWidth], 0.05);
+						.domain(d3.range(data.length))
+						.rangeBands([0, graphWidth], 0);
 
-					// TODO: Why do I only see two rectangles instead of all 43?
-					graph.selectAll("rect")
+					graph.selectAll("rect.deathoverbar")
 					   .data(deathDays)
 					   .enter()
 					   .append("rect")
@@ -142,9 +141,11 @@
 					   .attr("y", 0)
 					   .attr("width", graphXScaleBand.rangeBand())
 					   .attr("height", graphHeight)
-					   .attr("fill", "none")
-					   .attr("stroke", "blue")
-					   .attr("stroke-width", "1")
+					   .attr("fill", "black")
+					   .attr("fill-opacity", "0")
+					   .attr("stroke", "none")
+					   .attr("stroke-width", "0")
+					   .attr("class", "deathhoverbar")
 					   .on("click", function(d) {
 							console.log(d);
 					   });
@@ -207,6 +208,7 @@
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
+			// TODO: Scale the map to fill its SVG space.
 			mapXScale.domain([0,20]).range([0, mapWidth]);
 			mapYScale.domain([0,20]).range([mapHeight, 0]);
 			
