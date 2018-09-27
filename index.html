@@ -166,10 +166,15 @@
 						.attr("stroke-width", "0")
 						.attr("id", function(d) { return d.deathdate; })
 						.attr("class", "deathhoverbar")
-						.on("click", function(d) {
-							map.selectAll(".death").attr("fill-opacity",".1");
-							map.selectAll(".deathday" + d.day).attr("fill-opacity","1");
-							console.dir(d);
+						.on("mouseover", function(d) {
+							// Seems like D3 should provide a filter for this, but
+							// who has time to figure that out?
+							for (let i=deathDays.length-1;i > d.day;i--) {
+								map.selectAll(".deathday" + i).attr("fill-opacity","0");
+							}
+						})
+						.on("mouseout", function(d) {
+							map.selectAll(".death").attr("fill-opacity","1");
 						});
 						
 	/*
@@ -231,8 +236,8 @@
 			streets = data;
 		
 			// TODO: Scale the map to fill its SVG space.
-			mapXScale.domain([0,20]).range([0, mapWidth]);
-			mapYScale.domain([0,20]).range([mapHeight, 0]);
+			mapXScale.domain([3,20]).range([0, mapWidth]);
+			mapYScale.domain([3,20]).range([mapHeight, 0]);
 			
 			for (let i=0; i < streets.length; i++) {
 				map.append("path")
