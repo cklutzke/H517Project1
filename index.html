@@ -11,6 +11,12 @@
 			fill: none;
 		}
 		
+		svg .mapLabel {
+			font-family: sans-serif;
+			font-size: 5px;
+			fill: gray;
+		}
+		
 		svg .pump {
 			fill: black;
 			stroke: none;
@@ -80,6 +86,7 @@
 		let ageRange = ["0-10","11-20","21-40","41-60","61-80","> 80"]
 		
 		let streets = [];
+		let mapLabels = [];
 		let pumps = [];
 		
 		let deathDays = [];
@@ -245,6 +252,38 @@
 			});
 		}
 		
+		// Load and draw the street and building labels.
+		function drawMapLabels() {
+			d3.csv("maplabels.csv", function(data) {
+				for (let i=0; i < data.length; i++) {
+					mapLabels.push({
+						x: data[i].x,
+						y: data[i].y,
+						text: data[i].text,
+						angle: data[i].angle
+					});
+				}
+				
+				map.selectAll('.mapLabel')
+					.data(mapLabels)
+					.enter()
+					.append('text')
+					.attr('class', 'mapLabel')
+					.attr('x', function(d) { return d.x; })
+					.attr('y', function(d) { return d.y; })
+					.text(function(d) { return d.text; })
+					.attr('transform', function(d) {
+						return 'rotate(' + d.angle + ',' +
+							d.x + ',' + d.y + ')';
+					});
+					
+				// TODO: Remove this after we've established coordinates for all the labels.
+				map.on("click", function() {
+					console.dir(event.clientX + ", " + event.clientY);
+				});
+			});
+		}
+		
 		// Provide a means of drawing the map lines at scale.
 		let lineFunction = d3.svg.line()
 			.x(function(d) { return mapXScale(d.x); })
@@ -265,7 +304,9 @@
 					.attr("class", "street");
 			}
 			
+			drawMapLabels();
 			drawPumps();
+			// TODO: Uncomment this after we've placed all the labels.
 			drawDeaths();
 		});
 		

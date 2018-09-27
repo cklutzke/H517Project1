@@ -11,12 +11,6 @@ For a B you need to add:
 more data to the map - major street names and the location of the brewery and the work house
 ability to easily see on the map whether each victim was male or female
 ability to easily see on the map the age of each victim
-	age 0-10      0
-		11-20     1
-		21-40     2
-		41-60     3
-		61-80     4
-		> 80      5
 additional graphs showing the distribution of deaths by sex and age overall
 
 For an A you need to add:
