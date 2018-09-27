@@ -6,7 +6,8 @@ TODO:
 
 For a C you need:
 a timeline graph showing the number of deaths per day
-	Add axes to the graph.
+	add axes
+	draw invisible rects over each day to trigger hover events
 	
 ability to move the mouse over the timeline graph to choose which day to visualize - this should affect the deaths visible on the map and in the graph - at minimum all cholera deaths prior to that date should be shown on the map and the graph
 the graph and the map should be stable (i.e., they should not move when new data is added or removed)

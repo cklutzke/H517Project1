@@ -126,6 +126,29 @@
 						.style('stroke-width', '3px')
 						.attr('d', graphPathGenerator(deathDays));
 						
+					//Create hover bars
+					let graphXScaleBand = d3.scale.ordinal()
+						.domain([0, data.length-1])
+						.rangeRoundBands([0, graphWidth], 0.05);
+
+					// TODO: Why do I only see two rectangles instead of all 43?
+					graph.selectAll("rect")
+					   .data(deathDays)
+					   .enter()
+					   .append("rect")
+					   .attr("x", function(d, i) {
+							return graphXScaleBand(i);
+					   })
+					   .attr("y", 0)
+					   .attr("width", graphXScaleBand.rangeBand())
+					   .attr("height", graphHeight)
+					   .attr("fill", "none")
+					   .attr("stroke", "blue")
+					   .attr("stroke-width", "1")
+					   .on("click", function(d) {
+							console.log(d);
+					   });
+						
 	/*
 			var xAxis = d3.svg.axis()
     			.scale(xScale)
