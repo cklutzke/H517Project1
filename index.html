@@ -18,17 +18,28 @@
 		}
 		
 		svg .death {
-			fill: red;
 			stroke: none;
 			r: 2;
+		}
+		
+		svg .male {
+			fill: blue;
+		}
+		
+		svg .female {
+			fill: red;
+		}
+		
+		svg .deathhoverbar:hover {
+			fill-opacity: .1;
 		}
 		
 	</style>
 </head>
 <body>
 
-	<svg id="map" width="400px" height="400px">
-		<rect id="mapBorder" x="0" y="0" width="400" height="400" stroke-width="1" stroke="black" fill="none"/>
+	<svg id="map" width="500px" height="500px">
+		<rect id="mapBorder" x="0" y="0" width="500" height="500" stroke-width="1" stroke="black" fill="none"/>
 	</svg>
 	<svg id="graph" width="600px" height="400px">
 		<rect id="graphBorder" x="0" y="0" width="600" height="400" stroke-width="1" stroke="black" fill="none"/>
@@ -72,8 +83,8 @@
 						{
 							x: data[i].x,
 							y: data[i].y,
-							age: data[i].age,
-							gender: data[i].gender
+							ageRange: data[i].age,
+							gender: +data[i].gender==1 ? "female" : "male"
 						}
 					);
 				}
@@ -108,9 +119,16 @@
 						.data(deaths)
 						.enter()
 						.append('circle')
-						.attr('class', 'death')
+						.attr('id', function(d,i) { return "death" + i; })
+						.attr('class', function(d) {
+							return "death " +
+								d.gender + " " +
+								"deathday" + d.deathday;
+						})
 						.attr('cx', function(d) { return mapXScale(d.x); })
 						.attr('cy', function(d) { return mapYScale(d.y); });
+						
+					// TODO: Draw axes on the graph.
 					
 					// Draw the deaths on the graph.
 					graphXScale.domain([0, data.length-1]).range([0, graphWidth]);
@@ -126,29 +144,33 @@
 						.style('stroke-width', '3px')
 						.attr('d', graphPathGenerator(deathDays));
 						
-					//Create hover bars
+					// Create hover bars
+					// TODO: Center the hoverbars over each point.
 					let graphXScaleBand = d3.scale.ordinal()
 						.domain(d3.range(data.length))
 						.rangeBands([0, graphWidth], 0);
 
-					graph.selectAll("rect.deathoverbar")
-					   .data(deathDays)
-					   .enter()
-					   .append("rect")
-					   .attr("x", function(d, i) {
+					graph.selectAll("rect.deathhoverbar")
+						.data(deathDays)
+						.enter()
+						.append("rect")
+						.attr("x", function(d, i) {
 							return graphXScaleBand(i);
-					   })
-					   .attr("y", 0)
-					   .attr("width", graphXScaleBand.rangeBand())
-					   .attr("height", graphHeight)
-					   .attr("fill", "black")
-					   .attr("fill-opacity", "0")
-					   .attr("stroke", "none")
-					   .attr("stroke-width", "0")
-					   .attr("class", "deathhoverbar")
-					   .on("click", function(d) {
-							console.log(d);
-					   });
+						})
+						.attr("y", 0)
+						.attr("width", graphXScaleBand.rangeBand())
+						.attr("height", graphHeight)
+						.attr("fill", "black")
+						.attr("fill-opacity", "0")
+						.attr("stroke", "none")
+						.attr("stroke-width", "0")
+						.attr("id", function(d) { return d.deathdate; })
+						.attr("class", "deathhoverbar")
+						.on("click", function(d) {
+							map.selectAll(".death").attr("fill-opacity",".1");
+							map.selectAll(".deathday" + d.day).attr("fill-opacity","1");
+							console.dir(d);
+						});
 						
 	/*
 			var xAxis = d3.svg.axis()

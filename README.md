@@ -2,14 +2,21 @@
 Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
-TODO:
+deaths_age_sex.csv - gives the location of each death in the deathdays file, in order, plus information on the age and sex of the victim.
+	age 0-10      0
+		11-20     1
+		21-40     2
+		41-60     3
+		61-80     4
+		> 80      5
 
+TODO:
 For a C you need:
-a timeline graph showing the number of deaths per day
-	add axes
-	draw invisible rects over each day to trigger hover events
 	
 ability to move the mouse over the timeline graph to choose which day to visualize - this should affect the deaths visible on the map and in the graph - at minimum all cholera deaths prior to that date should be shown on the map and the graph
+	Trigger hover events from invisible graph bars
+	Change state of death circles between visible and invisible.
+	
 the graph and the map should be stable (i.e., they should not move when new data is added or removed)
 the graph and the map should be well labeled
 you should check your visualization with a color blindness simulation tool to see that its OK
