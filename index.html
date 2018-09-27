@@ -39,11 +39,10 @@
 <body>
 
 	<svg id="map" width="500px" height="500px">
-		<rect id="mapBorder" x="0" y="0" width="500" height="500" stroke-width="1" stroke="black" fill="none"/>
+		<text id='label' x='5' y='20'>Cholera Outbreak: London, 1854</text>
 	</svg>
-	<svg id="graph" width="600px" height="400px">
-		<rect id="graphBorder" x="0" y="0" width="600" height="400" stroke-width="1" stroke="black" fill="none"/>
-		<text id='label' x='20' y='20'>Deaths per day</text>
+	<svg id="graph" width="500px" height="500px">
+		<text id='label' x='5' y='20'>Deaths per day</text>
 	</svg>
 
 	
@@ -175,6 +174,11 @@
 						})
 						.on("mouseout", function(d) {
 							map.selectAll(".death").attr("fill-opacity","1");
+						})
+						.append("title")
+						.text(function(d) {
+							return d.deathdate + ": " + d.count + 
+								(d.count==1 ? " death" : " deaths");
 						});
 						
 	/*
