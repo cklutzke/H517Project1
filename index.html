@@ -13,7 +13,6 @@
 		
 		svg .mapLabel {
 			font-family: sans-serif;
-			font-size: 5px;
 			fill: gray;
 		}
 		
@@ -260,6 +259,7 @@
 						x: data[i].x,
 						y: data[i].y,
 						text: data[i].text,
+						fontsize: data[i].fontsize,
 						angle: data[i].angle
 					});
 				}
@@ -271,16 +271,20 @@
 					.attr('class', 'mapLabel')
 					.attr('x', function(d) { return d.x; })
 					.attr('y', function(d) { return d.y; })
+					.attr('font-size', function(d) { return d.fontsize; })
 					.text(function(d) { return d.text; })
 					.attr('transform', function(d) {
 						return 'rotate(' + d.angle + ',' +
 							d.x + ',' + d.y + ')';
 					});
 					
-				// TODO: Remove this after we've established coordinates for all the labels.
+				/*
+				// We used this code to estimate coordinates
+				// for all the labels.
 				map.on("click", function() {
 					console.dir(event.clientX + ", " + event.clientY);
 				});
+				*/
 			});
 		}
 		
@@ -306,7 +310,6 @@
 			
 			drawMapLabels();
 			drawPumps();
-			// TODO: Uncomment this after we've placed all the labels.
 			drawDeaths();
 		});
 		
