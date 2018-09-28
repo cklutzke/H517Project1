@@ -86,7 +86,7 @@
 		
 		let graph = d3.select("svg#graph");
 		let graphWidth = parseInt(graph.style("width"));
-		let graphHeight = parseInt(graph.style("height"));
+		let graphHeight = parseInt(graph.style("height")) - 50;
 		let graphXScale = d3.scale.linear();
 		let graphYScale = d3.scale.linear();
 		let padding = 30;
@@ -101,8 +101,105 @@
 		let deaths = [];
 		let maxDeaths = 0;
 		
+		// Draw the location of each death on the map.
+		// TODO: Consider using squares or crosses to mark deaths.
+		function drawDeathsMap() {
+			map.selectAll('.death')
+				.data(deaths)
+				.enter()
+				.append('circle')
+				.attr('id', function(d,i) { return "death" + i; })
+				.attr('class', function(d) {
+					return "death " +
+						d.gender + " " +
+						"deathday" + d.deathday;
+				})
+				.attr('cx', function(d) { return mapXScale(d.x); })
+				.attr('cy', function(d) { return mapYScale(d.y); })
+				.append("title")
+				.text(function(d) {
+					return d.gender + "\r\n" +
+						"age " + ageRange[d.ageRange] + "\r\n" +
+						"died " + d.deathdate;
+				});
+		}
+		
+		// Draw the deaths on the graph.
+		function drawDeathsGraph() {
+			graphXScale.domain([0, deathDays.length-1]).range([padding, graphWidth - padding]);
+			graphYScale.domain([0, maxDeaths]).range([graphHeight - padding, padding]);
+
+			let graphPathGenerator = d3.svg.line()
+				.x(function(d) { return graphXScale(d.day); })
+				.y(function(d) { return graphYScale(d.total); });
+
+			graph.append('path')
+				.style('fill', 'none')
+				.style('stroke', 'red')
+				.style('stroke-width', '2px')
+				.attr('d', graphPathGenerator(deathDays));
+				
+			// Create hover bars
+			// TODO: CENTER the hoverbars over each point.
+			let graphXScaleBand = d3.scale.ordinal()
+				.domain(d3.range(deathDays.length))
+				.rangeBands([padding, graphWidth - padding], 0);
+
+			graph.selectAll("rect.deathhoverbar")
+				.data(deathDays)
+				.enter()
+				.append("rect")
+				.attr("x", function(d, i) {
+					return graphXScaleBand(i);
+				})
+				.attr("y", padding)
+				.attr("width", graphXScaleBand.rangeBand())
+				.attr("height", graphHeight - padding * 2)
+				.attr("fill", "black")
+				.attr("fill-opacity", "0")
+				.attr("stroke", "none")
+				.attr("stroke-width", "0")
+				.attr("id", function(d) { return d.deathdate; })
+				.attr("class", "deathhoverbar")
+				.on("mouseover", function(d) {
+					// Seems like D3 should provide a filter for this, but
+					// who has time to figure that out?
+					for (let i=deathDays.length-1;i > d.day;i--) {
+						map.selectAll(".deathday" + i).attr("fill-opacity","0");
+					}
+				})
+				.on("mouseout", function(d) {
+					map.selectAll(".death").attr("fill-opacity","1");
+				})
+				.append("title")
+				.text(function(d) {
+					return d.deathdate + ": " + d.total + 
+						(d.total==1 ? " death" : " deaths");
+				});
+				
+				// Draw the axes.
+				// TODO: Label the X axis by date, not # of days.
+				let xAxis = d3.svg.axis()
+					.scale(graphXScale)
+					.orient('bottom')
+
+				let yAxis = d3.svg.axis()
+					.scale(graphYScale)
+					.orient('left');
+
+				graph.append('g')
+					.attr('class', 'axis')
+					.attr('transform', 'translate(0,' + (graphHeight - padding) + ')')
+					.call(xAxis);
+
+				graph.append('g')
+					.attr('class', 'axis')
+					.attr('transform', 'translate(' + padding + ',0)')
+					.call(yAxis);
+		}		
+		
 		// Load the death data and add it to the map and the graph.
-		function drawDeaths() {
+		function loadDeaths() {
 		
 			// Load the coordinates and demographics for each death. These are
 			// assumed to be provided in the order in which the victim died, for
@@ -125,117 +222,43 @@
 					let deathId = 0;
 					for (let day = 0; day < data.length; day++) {
 					
-						let deathCount = +data[day].deaths;
+						let totalCount = +data[day].deaths;
+						let maleCount = 0;
+						let femaleCount = 0;
+						
+						// Find the death with the greatest number of days, to set the vertical scale.
+						if (maxDeaths < totalCount) {
+							maxDeaths = totalCount;
+						}
+						
+						for (let i=0; i < totalCount; i++) {
+							// Update the individual death records with the day and date of death.
+							deaths[deathId].deathday = day;
+							deaths[deathId].deathdate = data[day].date;
+							
+							// Count the deaths on each deathDay by demographic.
+							if (deaths[deathId].gender == "male") {
+								maleCount++;
+							} else {
+								femaleCount++;
+							}
+							
+							// Increment to the next individual death record.
+							deathId++;
+						}
 						
 						deathDays.push ({
 							day: day,
 							deathdate: data[day].date,
-							count: deathCount
+							total: totalCount,
+							male: maleCount,
+							female: femaleCount
 						});
 						
-						if (maxDeaths < deathCount) {
-							maxDeaths = deathCount;
-						}
-						
-						for (let i=0; i < deathCount; i++) {
-							deaths[deathId].deathday = day;
-							deaths[deathId].deathdate = data[day].date;
-							deathId++;
-						}
 					}
 				
-					// Draw each death on the map.
-					// TODO: Consider using squares or crosses to mark deaths.
-					map.selectAll('.death')
-						.data(deaths)
-						.enter()
-						.append('circle')
-						.attr('id', function(d,i) { return "death" + i; })
-						.attr('class', function(d) {
-							return "death " +
-								d.gender + " " +
-								"deathday" + d.deathday;
-						})
-						.attr('cx', function(d) { return mapXScale(d.x); })
-						.attr('cy', function(d) { return mapYScale(d.y); })
-						.append("title")
-						.text(function(d) {
-							return d.gender + "\r\n" +
-								"age " + ageRange[d.ageRange] + "\r\n" +
-								"died " + d.deathdate;
-						});
-						
-					// Draw the deaths on the graph.
-					graphXScale.domain([0, data.length-1]).range([padding, graphWidth - padding]);
-					graphYScale.domain([0, maxDeaths]).range([graphHeight - padding, padding]);
-
-					let graphPathGenerator = d3.svg.line()
-						.x(function(d) { return graphXScale(d.day); })
-						.y(function(d) { return graphYScale(d.count); });
-
-					graph.append('path')
-						.style('fill', 'none')
-						.style('stroke', 'steelblue')
-						.style('stroke-width', '3px')
-						.attr('d', graphPathGenerator(deathDays));
-						
-					// Create hover bars
-					// TODO: CENTER the hoverbars over each point.
-					let graphXScaleBand = d3.scale.ordinal()
-						.domain(d3.range(data.length))
-						.rangeBands([padding, graphWidth - padding], 0);
-
-					graph.selectAll("rect.deathhoverbar")
-						.data(deathDays)
-						.enter()
-						.append("rect")
-						.attr("x", function(d, i) {
-							return graphXScaleBand(i);
-						})
-						.attr("y", padding)
-						.attr("width", graphXScaleBand.rangeBand())
-						.attr("height", graphHeight - padding * 2)
-						.attr("fill", "black")
-						.attr("fill-opacity", "0")
-						.attr("stroke", "none")
-						.attr("stroke-width", "0")
-						.attr("id", function(d) { return d.deathdate; })
-						.attr("class", "deathhoverbar")
-						.on("mouseover", function(d) {
-							// Seems like D3 should provide a filter for this, but
-							// who has time to figure that out?
-							for (let i=deathDays.length-1;i > d.day;i--) {
-								map.selectAll(".deathday" + i).attr("fill-opacity","0");
-							}
-						})
-						.on("mouseout", function(d) {
-							map.selectAll(".death").attr("fill-opacity","1");
-						})
-						.append("title")
-						.text(function(d) {
-							return d.deathdate + ": " + d.count + 
-								(d.count==1 ? " death" : " deaths");
-						});
-						
-						// Draw the axes.
-						// TODO: Label the X axis by date, not # of days.
-						let xAxis = d3.svg.axis()
-							.scale(graphXScale)
-							.orient('bottom')
-
-						let yAxis = d3.svg.axis()
-							.scale(graphYScale)
-							.orient('left');
-
-						graph.append('g')
-							.attr('class', 'axis')
-							.attr('transform', 'translate(0,' + (graphHeight - padding) + ')')
-							.call(xAxis);
-
-						graph.append('g')
-							.attr('class', 'axis')
-							.attr('transform', 'translate(' + padding + ',0)')
-							.call(yAxis);
+					drawDeathsMap();
+					drawDeathsGraph();
 				});
 				
 			});
@@ -320,9 +343,8 @@
 			
 			drawMapLabels();
 			drawPumps();
-			drawDeaths();
+			loadDeaths();
 		});
-		
 				
 	</script>
 </body>

@@ -4,9 +4,9 @@ http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
 For a B you need to add:
+additional graphs showing the distribution of deaths by sex and age overall
 ability to easily see on the map whether each victim was male or female
 ability to easily see on the map the age of each victim
-additional graphs showing the distribution of deaths by sex and age overall
 
 For an A you need to add:
 ability to zoom in/out and pan around the map
