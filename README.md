@@ -3,9 +3,6 @@ Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
-For a C you need:
-an about screen with details on who wrote the project, where the data came from, etc.
-
 For a B you need to add:
 ability to easily see on the map whether each victim was male or female
 ability to easily see on the map the age of each victim
