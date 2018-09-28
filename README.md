@@ -5,11 +5,7 @@ http://vis.ninja/teaching/2018/H517/project1/
 TODO:
 For a B you need to add:
 additional graphs showing the distribution of deaths by sex and age overall
-	Set up a mode in which male deaths are blue and female deaths are orange.
-		Show a key for blue vs orange.
 	Set up controls to toggle between modes.
-ability to easily see on the map whether each victim was male or female
-ability to easily see on the map the age of each victim
 
 For an A you need to add:
 ability to zoom in/out and pan around the map

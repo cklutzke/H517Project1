@@ -24,7 +24,6 @@
 		}
 		
 		svg .death {
-			fill: red;
 			stroke: none;
 			r: 2;
 		}
@@ -107,6 +106,36 @@
 		let deaths = [];
 		let maxDeaths = 0;
 		
+		function hideElements() {
+			map.selectAll('.death').attr('fill','none');
+				
+			graph.selectAll('.graphline').attr('stroke','none');
+				
+			// TODO: Hide any unused key displays.
+		}
+		
+		function displayTotal() {
+			hideElements();
+			
+			map.selectAll('.death').attr('fill','red');
+				
+			graph.select('#graphlinetotal')
+				.attr('stroke','red')
+				.attr('opacity','1');
+		}
+		
+		function displayGender() {
+			hideElements();
+			
+			map.selectAll('.male').attr('fill','blue');
+			map.selectAll('.female').attr('fill','orange');
+			
+			graph.select('#graphlinegendermale').attr('stroke','blue');
+			graph.select('#graphlinegenderfemale').attr('stroke','orange');
+			
+			// TODO: Display a key to explain the colors.
+		}
+		
 		// Draw the location of each death on the map.
 		// TODO: Consider using squares or crosses to mark deaths.
 		function drawDeathsMap() {
@@ -122,6 +151,7 @@
 				})
 				.attr('cx', function(d) { return mapXScale(d.x); })
 				.attr('cy', function(d) { return mapYScale(d.y); })
+				.attr('fill','none')
 				.append("title")
 				.text(function(d) {
 					return d.gender + "\r\n" +
@@ -130,15 +160,15 @@
 				});
 		}
 		
-		// Draw the graph lines according to the current settings.
+		// Draw all the graph lines in advance.
 		function drawDeathsGraphLines() {
 			let graphTotalPathGenerator = d3.svg.line()
 				.x(function(d) { return graphXScale(d.day); })
 				.y(function(d) { return graphYScale(d.total); });
 
 			graph.append('path')
+				.attr('id', 'graphlinetotal')
 				.attr('class', 'graphline')
-				.style('stroke', 'red')
 				.attr('d', graphTotalPathGenerator(deathDays));
 				
 			let graphMalePathGenerator = d3.svg.line()
@@ -146,8 +176,8 @@
 				.y(function(d) { return graphYScale(d.male); });
 
 			graph.append('path')
+				.attr('id', 'graphlinegendermale')
 				.attr('class', 'graphline')
-				.style('stroke', 'blue')
 				.attr('d', graphMalePathGenerator(deathDays));
 
 			let graphFemalePathGenerator = d3.svg.line()
@@ -155,8 +185,8 @@
 				.y(function(d) { return graphYScale(d.female); });
 
 			graph.append('path')
+				.attr('id', 'graphlinegenderfemale')
 				.attr('class', 'graphline')
-				.style('stroke', 'orange')
 				.attr('d', graphFemalePathGenerator(deathDays));
 
 		}
@@ -288,6 +318,8 @@
 					drawDeathsMap();
 					drawDeathsGraphLines();
 					drawDeathsGraph();
+					
+					displayTotal();
 				});
 				
 			});
