@@ -29,6 +29,11 @@
 			r: 2;
 		}
 		
+		svg .graphline {
+			fill: none;
+			stroke-width: 1px;
+		}
+		
 		svg .deathhoverbar:hover {
 			fill-opacity: .1;
 		}
@@ -60,9 +65,10 @@
 	<br/>
 	<div class="pagetext">
 		<p>
-		In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician John Snow theorized that the disease was related to contaminated water.
-		He created a map that showed where the deaths occurred in relation to water pumps
-		in the area and showed they were strongly correlated with a water pump at Broad
+		In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
+		John Snow theorized that the disease was related to contaminated water.
+		He created a map that showed where the deaths occurred in relation to water pumps in the area 
+		(the black dots), and showed they were strongly correlated with a water pump at Broad
 		Street and Cambridge street. This data visualization is inspired by his work.
 		</p>
 	</div>
@@ -124,21 +130,40 @@
 				});
 		}
 		
-		// Draw the deaths on the graph.
-		function drawDeathsGraph() {
-			graphXScale.domain([0, deathDays.length-1]).range([padding, graphWidth - padding]);
-			graphYScale.domain([0, maxDeaths]).range([graphHeight - padding, padding]);
-
-			let graphPathGenerator = d3.svg.line()
+		// Draw the graph lines according to the current settings.
+		function drawDeathsGraphLines() {
+			let graphTotalPathGenerator = d3.svg.line()
 				.x(function(d) { return graphXScale(d.day); })
 				.y(function(d) { return graphYScale(d.total); });
 
 			graph.append('path')
-				.style('fill', 'none')
+				.attr('class', 'graphline')
 				.style('stroke', 'red')
-				.style('stroke-width', '2px')
-				.attr('d', graphPathGenerator(deathDays));
+				.attr('d', graphTotalPathGenerator(deathDays));
 				
+			let graphMalePathGenerator = d3.svg.line()
+				.x(function(d) { return graphXScale(d.day); })
+				.y(function(d) { return graphYScale(d.male); });
+
+			graph.append('path')
+				.attr('class', 'graphline')
+				.style('stroke', 'blue')
+				.attr('d', graphMalePathGenerator(deathDays));
+
+			let graphFemalePathGenerator = d3.svg.line()
+				.x(function(d) { return graphXScale(d.day); })
+				.y(function(d) { return graphYScale(d.female); });
+
+			graph.append('path')
+				.attr('class', 'graphline')
+				.style('stroke', 'orange')
+				.attr('d', graphFemalePathGenerator(deathDays));
+
+		}
+		
+		// Draw the overall structure of the graph.
+		function drawDeathsGraph() {
+
 			// Create hover bars
 			// TODO: CENTER the hoverbars over each point.
 			let graphXScaleBand = d3.scale.ordinal()
@@ -256,8 +281,12 @@
 						});
 						
 					}
-				
+
+					graphXScale.domain([0, deathDays.length-1]).range([padding, graphWidth - padding]);
+					graphYScale.domain([0, maxDeaths]).range([graphHeight - padding, padding]);
+					
 					drawDeathsMap();
+					drawDeathsGraphLines();
 					drawDeathsGraph();
 				});
 				
