@@ -190,11 +190,11 @@
 					// Seems like D3 should provide a filter for this, but
 					// who has time to figure that out?
 					for (let i=deathDays.length-1;i > d.day;i--) {
-						map.selectAll(".deathday" + i).attr("fill-opacity","0");
+						map.selectAll(".deathday" + i).attr("visibility","hidden");
 					}
 				})
 				.on("mouseout", function(d) {
-					map.selectAll(".death").attr("fill-opacity","1");
+					map.selectAll(".death").attr("visibility","visible");
 				})
 				.append("title")
 				.text(function(d) {
