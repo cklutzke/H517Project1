@@ -2,7 +2,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>H517 - Project 1</title>
+	<title>ckixd - Cholera</title>
+	<link type="text/css" rel="stylesheet" href="cholera.css"/>
 	<script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 	<style>
 		svg .street {
@@ -48,9 +49,16 @@
 	</style>
 </head>
 <body>
-
+	<div class="pagetitle">Cholera Outbreak: London, 1854</div>
+	<div class="pagetext">
+		<p>
+		In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician John Snow theorized that the disease was related to contaminated water.
+		He created a map that showed where the deaths occurred in relation to water pumps
+		in the area and showed they were strongly correlated with a water pump at Broad
+		Street and Cambridge street. This data visualization is inspired by his work.
+		</p>
+	</div>
 	<svg id="map" width="500px" height="500px">
-		<text id='label' x='5' y='20'>Cholera Outbreak: London, 1854</text>
 	</svg>
 	<svg id="graph" width="500px" height="500px">
 		<text id='label' x='5' y='20'>Deaths per day</text>
@@ -129,6 +137,7 @@
 					}
 				
 					// Draw each death on the map.
+					// TODO: Consider using squares or crosses to mark deaths.
 					map.selectAll('.death')
 						.data(deaths)
 						.enter()

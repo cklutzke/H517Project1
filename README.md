@@ -4,7 +4,6 @@ http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
 For a C you need:
-the graph and the map should be well labeled
 an about screen with details on who wrote the project, where the data came from, etc.
 
 For a B you need to add:
