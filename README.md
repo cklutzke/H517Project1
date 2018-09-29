@@ -3,10 +3,6 @@ Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
-FOR A B YOU NEED TO ADD:
-	additional graphs showing the distribution of deaths by sex and age overall
-		Add controls for display by age.
-
 Document the following on the ABOUT page:
 	Your design process: How did you go about designing the visualization? What are some of the initial designs / ideas you attempted in the beginning? A good way to document your design process is to scan your sketches and include them in the documentation page.
 		Iterative design: Draw map, draw graph, make graph interactive by date, add gender data, add age data

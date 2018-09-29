@@ -204,13 +204,13 @@
 			resetElements();
 			
 			for (let i=0; i < ageRanges.length; i++) {
-				map.selectAll('.age' + ageRanges[i].label)
+				map.selectAll('.age' + i)
 					.attr('fill', ageRanges[i].color);
-				graph.select('#graphlineage' + ageRanges[i].label)
+				graph.select('#graphlineage' + i)
 					.attr('stroke', ageRanges[i].color);
-				graph.select('#buttonage' + ageRanges[i].label)
+				graph.select('#buttonage' + i)
 					.attr('visibility','visible');
-				graph.select('#buttonagelabel' + ageRanges[i].label)
+				graph.select('#buttonagelabel' + i)
 					.attr('visibility','visible');
 			}
 		}
@@ -225,7 +225,7 @@
 				.attr('class', function(d) {
 					return "death " +
 						d.gender + " " +
-						"age" + ageRanges[d.age].label + " " +
+						"age" + d.age + " " +
 						"deathday" + d.deathday;
 				})
 				.attr('cx', function(d) { return mapXScale(d.x); })
@@ -274,8 +274,8 @@
 					.y(function(d) { return graphYScale(d.age[i]); });
 
 				graph.append('path')
-					.attr('id', 'graphlineage' + ageRanges[i].label)
-					.attr('class', 'graphline age' + ageRanges[i].label)
+					.attr('id', 'graphlineage' + i)
+					.attr('class', 'graphline age' + i)
 					.attr('d', graphPathGenerator(deathDays));
 			}
 		}
@@ -467,22 +467,22 @@
 			// By Age Key Buttons
 			for (let i=0; i < ageRanges.length; i++) {
 				graph.append('rect')
-					.attr('id', 'buttonage' + ageRanges[i].label)
-					.attr('class', 'graphbutton graphkeybutton age' + ageRanges[i].label)
+					.attr('id', 'buttonage' + i)
+					.attr('class', 'graphbutton graphkeybutton age' + i)
 					.attr("x", graphWidth - (keyButtonWidth + buttonPadding))
 					.attr("y", buttonPadding * (i + 1) + buttonHeight * i)
 					.attr("width", keyButtonWidth)
 					.attr("height", buttonHeight)
 					.attr("fill", ageRanges[i].color)
 					.on('click', function(d) {
-						ageRanges[i].opacity = (ageRanges[i].opacity == 1 ? .2 : 1);
-						d3.selectAll('.age' + ageRanges[i].label)
+						ageRanges[i].opacity = (ageRanges[i].opacity == 1 ? .1 : 1);
+						d3.selectAll('.age' + i)
 							.attr('fill-opacity', ageRanges[i].opacity);
-						d3.selectAll('.age' + ageRanges[i].label)
+						d3.selectAll('.age' + i)
 							.attr('stroke-opacity', ageRanges[i].opacity);
 					});
 				graph.append('text')
-					.attr('id', 'buttonage' + ageRanges[i].label)
+					.attr('id', 'buttonagelabel' + i)
 					.attr('class', 'graphbuttonlabel graphkeybutton')
 					.text(ageRanges[i].label)
 					.attr('x', graphWidth - (keyButtonWidth / 2 + buttonPadding))
