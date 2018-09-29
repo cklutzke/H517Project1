@@ -5,8 +5,6 @@ http://vis.ninja/teaching/2018/H517/project1/
 TODO:
 For a B you need to add:
 additional graphs showing the distribution of deaths by sex and age overall
-	Add key labels.
-		Clicking on the key items should toggle their opacity.
 	Add controls for display by age.
 
 FOR AN A YOU NEED TO ADD:
