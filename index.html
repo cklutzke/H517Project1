@@ -110,10 +110,41 @@
 		let buttonWidth = (graphWidth - 4 * buttonPadding) / 3;
 		let keyButtonWidth = buttonWidth / 2;
 	
-		let ageRange = ["0-10","11-20","21-40","41-60","61-80","> 80"]
-		
 		let maleOpacity = 1;
 		let famaleOpacity = 1;
+		
+		let ageRanges = [
+			{
+				label: '0-10',
+				opacity: 1,
+				color: '#17FF17'
+			},
+			{
+				label: '11-20',
+				opacity: 1,
+				color: '#00E800'
+			},
+			{
+				label: '21-40',
+				opacity: 1,
+				color: '#00BA00'
+			},
+			{
+				label: '41-60',
+				opacity: 1,
+				color: '#008C00'
+			},
+			{
+				label: '61-80',
+				opacity: 1,
+				color: '#005D00'
+			},
+			{
+				label: '> 80',
+				opacity: 1,
+				color: '#002F00'
+			}
+		];
 		
 		let streets = [];
 		let mapLabels = [];
@@ -138,6 +169,10 @@
 				
 			maleOpacity = 1;
 			femaleOpacity = 1;
+			
+			for (let i=0; i < ageRanges.length; i++) {
+				ageRanges[i].opacity = 1;
+			}
 		}
 		
 		function displayTotal() {
@@ -165,6 +200,21 @@
 			graph.select('#buttongenderfemalelabel').attr('visibility','visible');
 		}
 		
+		function displayAge() {
+			resetElements();
+			
+			for (let i=0; i < ageRanges.length; i++) {
+				map.selectAll('.age' + ageRanges[i].label)
+					.attr('fill', ageRanges[i].color);
+				graph.select('#graphlineage' + ageRanges[i].label)
+					.attr('stroke', ageRanges[i].color);
+				graph.select('#buttonage' + ageRanges[i].label)
+					.attr('visibility','visible');
+				graph.select('#buttonagelabel' + ageRanges[i].label)
+					.attr('visibility','visible');
+			}
+		}
+		
 		// Draw the location of each death on the map.
 		function drawDeathsMap() {
 			map.selectAll('.death')
@@ -175,6 +225,7 @@
 				.attr('class', function(d) {
 					return "death " +
 						d.gender + " " +
+						"age" + ageRanges[d.age].label + " " +
 						"deathday" + d.deathday;
 				})
 				.attr('cx', function(d) { return mapXScale(d.x); })
@@ -183,7 +234,7 @@
 				.append("title")
 				.text(function(d) {
 					return d.gender + "\r\n" +
-						"age " + ageRange[d.ageRange] + "\r\n" +
+						"age " + ageRanges[d.age].label + "\r\n" +
 						"died " + d.deathdate;
 				});
 		}
@@ -217,6 +268,16 @@
 				.attr('class', 'graphline female')
 				.attr('d', graphFemalePathGenerator(deathDays));
 
+			for (let i=0; i < ageRanges.length; i++) {
+				let graphPathGenerator = d3.svg.line()
+					.x(function(d) { return graphXScale(d.day); })
+					.y(function(d) { return graphYScale(d.age[i]); });
+
+				graph.append('path')
+					.attr('id', 'graphlineage' + ageRanges[i].label)
+					.attr('class', 'graphline age' + ageRanges[i].label)
+					.attr('d', graphPathGenerator(deathDays));
+			}
 		}
 		
 		// Draw the overall structure of the graph.
@@ -330,6 +391,29 @@
 				.attr('fill', 'white')
 				.style('pointer-events','none');
 				
+			// By Age
+			graph.append('rect')
+				.attr('id', 'buttonage')
+				.attr('class', 'graphbutton')
+				.attr("x", buttonPadding * 3 + buttonWidth * 2)
+				.attr("y", graphHeight + buttonPadding)
+				.attr("width", buttonWidth)
+				.attr("height", buttonHeight)
+				.attr("fill", "green")
+				.on('click', function(d) {
+					displayAge();
+				});
+			graph.append('text')
+				.attr('id', 'buttonagelabel')
+				.attr('class', 'graphbuttonlabel')
+				.text('By Age')
+				.attr('x', buttonPadding * 3 + buttonWidth * 2.5)
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+					buttonLabelYAdjust)
+				.attr('text-anchor','middle')
+				.attr('fill', 'white')
+				.style('pointer-events','none');
+				
 			// By Gender: Male Key
 			graph.append('rect')
 				.attr('id', 'buttongendermale')
@@ -380,6 +464,35 @@
 				.attr('fill', 'white')
 				.style('pointer-events','none');
 
+			// By Age Key Buttons
+			for (let i=0; i < ageRanges.length; i++) {
+				graph.append('rect')
+					.attr('id', 'buttonage' + ageRanges[i].label)
+					.attr('class', 'graphbutton graphkeybutton age' + ageRanges[i].label)
+					.attr("x", graphWidth - (keyButtonWidth + buttonPadding))
+					.attr("y", buttonPadding * (i + 1) + buttonHeight * i)
+					.attr("width", keyButtonWidth)
+					.attr("height", buttonHeight)
+					.attr("fill", ageRanges[i].color)
+					.on('click', function(d) {
+						ageRanges[i].opacity = (ageRanges[i].opacity == 1 ? .2 : 1);
+						d3.selectAll('.age' + ageRanges[i].label)
+							.attr('fill-opacity', ageRanges[i].opacity);
+						d3.selectAll('.age' + ageRanges[i].label)
+							.attr('stroke-opacity', ageRanges[i].opacity);
+					});
+				graph.append('text')
+					.attr('id', 'buttonage' + ageRanges[i].label)
+					.attr('class', 'graphbuttonlabel graphkeybutton')
+					.text(ageRanges[i].label)
+					.attr('x', graphWidth - (keyButtonWidth / 2 + buttonPadding))
+					.attr('y', buttonPadding * (i + 1) +
+						buttonHeight * i + buttonHeight / 2 +
+						buttonLabelYAdjust)
+					.attr('text-anchor','middle')
+					.attr('fill', 'white')
+					.style('pointer-events','none');
+			}
 		}		
 		
 		// Load the death data and add it to the map and the graph.
@@ -394,7 +507,7 @@
 						{
 							x: data[i].x,
 							y: data[i].y,
-							ageRange: +data[i].age,
+							age: +data[i].age,
 							gender: +data[i].gender==1 ? "female" : "male"
 						}
 					);
@@ -409,14 +522,17 @@
 						let totalCount = +data[day].deaths;
 						let maleCount = 0;
 						let femaleCount = 0;
+						let ageCount = [0,0,0,0,0,0];
 						
-						// Find the death with the greatest number of days, to set the vertical scale.
+						// Find the highest number of deaths on any day,
+						// to set the vertical scale.
 						if (maxDeaths < totalCount) {
 							maxDeaths = totalCount;
 						}
 						
 						for (let i=0; i < totalCount; i++) {
-							// Update the individual death records with the day and date of death.
+							// Update the individual death records with the day
+							// and date of death.
 							deaths[deathId].deathday = day;
 							deaths[deathId].deathdate = data[day].date;
 							
@@ -426,6 +542,7 @@
 							} else {
 								femaleCount++;
 							}
+							ageCount[deaths[deathId].age]++;
 							
 							// Increment to the next individual death record.
 							deathId++;
@@ -436,13 +553,16 @@
 							deathdate: data[day].date,
 							total: totalCount,
 							male: maleCount,
-							female: femaleCount
+							female: femaleCount,
+							age: ageCount
 						});
 						
 					}
 
-					graphXScale.domain([0, deathDays.length-1]).range([padding, graphWidth - padding]);
-					graphYScale.domain([0, maxDeaths]).range([graphHeight - padding, padding]);
+					graphXScale.domain([0, deathDays.length-1])
+						.range([padding, graphWidth - padding]);
+					graphYScale.domain([0, maxDeaths])
+						.range([graphHeight - padding, padding]);
 					
 					drawDeathsMap();
 					drawDeathsGraphLines();
