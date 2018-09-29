@@ -61,7 +61,7 @@
 			onclick="window.location.href='about.html'" />
 		</form>
 	</div>
-	<br/>
+	<br/><br/>
 	<div class="pagetext">
 		<p>
 		In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
@@ -89,13 +89,19 @@
 		let mapXScale = d3.scale.linear();
 		let mapYScale = d3.scale.linear();
 		
+		let buttonHeight = 30;
+		let buttonPadding = 10;
+		
 		let graph = d3.select("svg#graph");
 		let graphWidth = parseInt(graph.style("width"));
-		let graphHeight = parseInt(graph.style("height")) - 50;
+		let graphHeight = parseInt(graph.style("height")) - 
+			(buttonHeight + buttonPadding * 2);
 		let graphXScale = d3.scale.linear();
 		let graphYScale = d3.scale.linear();
 		let padding = 30;
 		
+		let buttonWidth = (graphWidth - 4 * buttonPadding) / 3;
+	
 		let ageRange = ["0-10","11-20","21-40","41-60","61-80","> 80"]
 		
 		let streets = [];
@@ -137,7 +143,6 @@
 		}
 		
 		// Draw the location of each death on the map.
-		// TODO: Consider using squares or crosses to mark deaths.
 		function drawDeathsMap() {
 			map.selectAll('.death')
 				.data(deaths)
@@ -232,25 +237,81 @@
 						(d.total==1 ? " death" : " deaths");
 				});
 				
-				// Draw the axes.
-				// TODO: Label the X axis by date, not # of days.
-				let xAxis = d3.svg.axis()
-					.scale(graphXScale)
-					.orient('bottom')
+			// Draw the axes.
+			// TODO: Label the X axis by date, not # of days.
+			let xAxis = d3.svg.axis()
+				.scale(graphXScale)
+				.orient('bottom')
 
-				let yAxis = d3.svg.axis()
-					.scale(graphYScale)
-					.orient('left');
+			let yAxis = d3.svg.axis()
+				.scale(graphYScale)
+				.orient('left');
 
-				graph.append('g')
-					.attr('class', 'axis')
-					.attr('transform', 'translate(0,' + (graphHeight - padding) + ')')
-					.call(xAxis);
+			graph.append('g')
+				.attr('class', 'axis')
+				.attr('transform', 'translate(0,' + (graphHeight - padding) + ')')
+				.call(xAxis);
 
-				graph.append('g')
-					.attr('class', 'axis')
-					.attr('transform', 'translate(' + padding + ',0)')
-					.call(yAxis);
+			graph.append('g')
+				.attr('class', 'axis')
+				.attr('transform', 'translate(' + padding + ',0)')
+				.call(yAxis);
+				
+			// Draw the buttons.
+			// TODO: Reconsider this value after fixing the font size.
+			let buttonLabelYAdjust = 5;
+			
+			graph.append('rect')
+				.attr('id', 'buttontotal')
+				.attr('class', 'graphbutton')
+				.attr("x", buttonPadding)
+				.attr("y", graphHeight + buttonPadding)
+				.attr("width", buttonWidth)
+				.attr("height", buttonHeight)
+				.attr('rx','5')
+				.attr('ry','5')
+				.attr("fill", "red")
+				.attr("fill-opacity", "1")
+				.attr("stroke", "none")
+				.on('click', function(d) {
+					displayTotal();
+				});
+			graph.append('text')
+				.attr('id', 'buttontotallabel')
+				.attr('class', 'graphbuttonlabel')
+				.text('Total')
+				.attr('x', buttonPadding + buttonWidth / 2)
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+					buttonLabelYAdjust)
+				.attr('text-anchor','middle')
+				.attr('fill', 'white')
+				.style('pointer-events','none');
+				
+			graph.append('rect')
+				.attr('id', 'buttongender')
+				.attr('class', 'graphbutton')
+				.attr("x", buttonPadding * 2 + buttonWidth)
+				.attr("y", graphHeight + buttonPadding)
+				.attr("width", buttonWidth)
+				.attr("height", buttonHeight)
+				.attr('rx','5')
+				.attr('ry','5')
+				.attr("fill", "blue")
+				.attr("fill-opacity", "1")
+				.attr("stroke", "none")
+				.on('click', function(d) {
+					displayGender();
+				});
+			graph.append('text')
+				.attr('id', 'buttontotallabel')
+				.attr('class', 'graphbuttonlabel')
+				.text('By Gender')
+				.attr('x', buttonPadding * 2 + buttonWidth * 1.5)
+				.attr('y', graphHeight + buttonPadding + buttonHeight / 2 + 
+					buttonLabelYAdjust)
+				.attr('text-anchor','middle')
+				.attr('fill', 'white')
+				.style('pointer-events','none');
 		}		
 		
 		// Load the death data and add it to the map and the graph.
@@ -334,6 +395,7 @@
 					);
 				}
 				
+				// TODO: Use some other shape for pumps.
 				map.selectAll('.pump')
 					.data(pumps)
 					.enter()
