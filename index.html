@@ -20,7 +20,6 @@
 		svg .pump {
 			fill: black;
 			stroke: none;
-			r: 4;
 		}
 		
 		svg .death {
@@ -73,7 +72,7 @@
 			In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
 			John Snow theorized that the disease was related to contaminated water.
 			He created a map that showed where the deaths occurred in relation to water pumps in the area 
-			(the black dots), and showed they were strongly correlated with a water pump at Broad
+			(the black diamonds), and showed they were strongly correlated with a water pump at Broad
 			Street and Cambridge street. This data visualization is inspired by his work.
 			</p>
 		</div>
@@ -576,6 +575,8 @@
 
 		// Load and draw the water pumps.
 		function drawPumps() {
+			const pumpSize = 8;
+		
 			d3.csv("pumps.csv", function(data) {
 				for (let i=0; i < data.length; i++) {
 					pumps.push(
@@ -583,19 +584,20 @@
 					);
 				}
 				
-				// TODO: Use some other shape for pumps.
-				/*
-					Maybe like vintage-water-pump.svg?
-					<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
-				*/
 				map.selectAll('.pump')
 					.data(pumps)
 					.enter()
-					.append('circle')
+					.append('rect')
 					.attr('class', 'pump')
-					.attr('cx', function(d) { return mapXScale(d.x); })
-					.attr('cy', function(d) { return mapYScale(d.y); });
-					
+					.attr('width', pumpSize)
+					.attr('height', pumpSize)
+					.attr('x', function(d) { return mapXScale(d.x) - pumpSize / 2; })
+					.attr('y', function(d) { return mapYScale(d.y) - pumpSize / 2; })
+					.attr('transform', function(d) {
+						return 'rotate(45 ' + 
+							mapXScale(d.x) + ' ' +
+							mapYScale(d.y) + ')';
+					});
 			});
 		}
 		
