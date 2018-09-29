@@ -59,23 +59,25 @@
 	</style>
 </head>
 <body>
-	<div class="pagetitle" style="float: left;">Cholera Outbreak: London, 1854</div>
-	<!--<div class="pagebutton" style="float: right; width: 100px; height: 30px;">About-->
-	<div style="float: right;">
-		<form>
-			<input class="pagebutton" type="button" value="About"
-			onclick="window.location.href='about.html'" />
-		</form>
-	</div>
-	<br/><br/>
-	<div class="pagetext">
-		<p>
-		In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
-		John Snow theorized that the disease was related to contaminated water.
-		He created a map that showed where the deaths occurred in relation to water pumps in the area 
-		(the black dots), and showed they were strongly correlated with a water pump at Broad
-		Street and Cambridge street. This data visualization is inspired by his work.
-		</p>
+	<div>
+		<!-- TODO: Constrain the width of this div to the size of the SVGs below. -->
+		<div class="pagetitle" style="float: left;">Cholera Outbreak: London, 1854</div>
+		<div style="float: right;">
+			<form>
+				<input class="pagebutton" type="button" value="About"
+				onclick="window.location.href='about.html'" />
+			</form>
+		</div>
+		<br/><br/>
+		<div class="pagetext">
+			<p>
+			In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
+			John Snow theorized that the disease was related to contaminated water.
+			He created a map that showed where the deaths occurred in relation to water pumps in the area 
+			(the black dots), and showed they were strongly correlated with a water pump at Broad
+			Street and Cambridge street. This data visualization is inspired by his work.
+			</p>
+		</div>
 	</div>
 	<svg id="map" width="500px" height="500px">
 	</svg>
