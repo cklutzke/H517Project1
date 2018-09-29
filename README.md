@@ -6,6 +6,7 @@ TODO:
 For a B you need to add:
 additional graphs showing the distribution of deaths by sex and age overall
 	Set up controls to toggle between modes.
+	Clickin gon the key items should reduce their opacity.
 
 For an A you need to add:
 ability to zoom in/out and pan around the map
