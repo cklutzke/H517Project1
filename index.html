@@ -326,10 +326,12 @@
 				});
 				
 			// Draw the axes.
-			// TODO: Label the X axis by date, not # of days.
 			let xAxis = d3.svg.axis()
 				.scale(graphXScale)
 				.orient('bottom')
+				.tickFormat(function(d) {
+					return deathDays[d].deathdate;
+				});
 
 			let yAxis = d3.svg.axis()
 				.scale(graphYScale)
@@ -346,7 +348,6 @@
 				.call(yAxis);
 				
 			// Draw the buttons.
-			// TODO: (Maybe) Reconsider this value after fixing the font size.
 			let buttonLabelYAdjust = 5;
 			
 			// Total Deaths
