@@ -288,20 +288,17 @@
 		function drawDeathsGraph() {
 
 			// Create hover bars
-			// TODO: CENTER the hoverbars over each point.
-			let graphXScaleBand = d3.scale.ordinal()
-				.domain(d3.range(deathDays.length))
-				.rangeBands([padding, graphWidth - padding], 0);
+			let hoverbarWidth = graphWidth / (deathDays.length - 1);
 
 			graph.selectAll("rect.deathhoverbar")
 				.data(deathDays)
 				.enter()
 				.append("rect")
 				.attr("x", function(d, i) {
-					return graphXScaleBand(i);
+					return graphXScale(i) - hoverbarWidth / 2;
 				})
 				.attr("y", padding)
-				.attr("width", graphXScaleBand.rangeBand())
+				.attr('width', hoverbarWidth)
 				.attr("height", graphHeight - padding * 2)
 				.attr("fill", "black")
 				.attr("fill-opacity", "0")
