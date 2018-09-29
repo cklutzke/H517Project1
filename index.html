@@ -42,6 +42,11 @@
 			stroke: none;
 		}
 		
+		svg .graphbuttonlabel {
+			font-family: 'Arial';
+			font-size: 15px;
+		}
+		
 		.axis path,
 		.axis line {
 			fill: none;
@@ -86,10 +91,10 @@
 	
 	<script type="text/javascript">
 	
-		// TODO: Can I make the size of the SVGs responsive?
-		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
+		// TODO: (Maybe) Can I make the size of the SVGs responsive?
 	
 		let map = d3.select("svg#map");
+		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
 		let mapWidth = parseInt(map.style("width"));
 		let mapHeight = parseInt(map.style("height"));
 		let mapXScale = d3.scale.linear();
@@ -341,7 +346,7 @@
 				.call(yAxis);
 				
 			// Draw the buttons.
-			// TODO: Reconsider this value after fixing the font size.
+			// TODO: (Maybe) Reconsider this value after fixing the font size.
 			let buttonLabelYAdjust = 5;
 			
 			// Total Deaths
@@ -562,6 +567,8 @@
 						.range([padding, graphWidth - padding]);
 					graphYScale.domain([0, maxDeaths])
 						.range([graphHeight - padding, padding]);
+						
+					// TODO: (Maybe) Can I change the Y scale for the different modes?
 					
 					drawDeathsMap();
 					drawDeathsGraphLines();
@@ -648,7 +655,6 @@
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
-			// TODO: Scale the map to fill its SVG space.
 			mapXScale.domain([3,20]).range([0, mapWidth]);
 			mapYScale.domain([3,20]).range([mapHeight, 0]);
 			

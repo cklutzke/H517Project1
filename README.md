@@ -3,7 +3,7 @@ Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
-Address all the TODO items
+Address all the non-Maybe TODO items
 
 Document the following on the ABOUT page:
 	Your design process: How did you go about designing the visualization? What are some of the initial designs / ideas you attempted in the beginning? A good way to document your design process is to scan your sketches and include them in the documentation page.
