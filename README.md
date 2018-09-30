@@ -4,9 +4,10 @@ http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
 Address all the TODO items
-	For filtering by date, look at this. The filter function should be able to look at the data instead of the class.
-		d3.selectAll("g")
-			.filter(function(d) { return d.data.uniqueID === myDatum.data.uniqueID; });
+			
+Add dotted line with baseline death rates for comparison.
+
+Select a diverging color for the age chart.
 
 Document the following on the ABOUT page:
 	Your design process: How did you go about designing the visualization? What are some of the initial designs / ideas you attempted in the beginning? A good way to document your design process is to scan your sketches and include them in the documentation page.

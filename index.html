@@ -77,16 +77,18 @@
 			In 1854, an outbreak of cholera in the Soho district of London killed 616 people. Physician
 			John Snow theorized that the disease was related to contaminated water.
 			He created a map that showed where the deaths occurred in relation to water pumps in the area 
-			(the black diamonds), and showed they were strongly correlated with a water pump at Broad
-			Street and Cambridge street. This data visualization is inspired by his work.
+			(the black diamonds), and showed they were strongly correlated with a water pump on Broad
+			Street. This data visualization is inspired by his work.
 			</p>
 		</div>
 	</div>
-	<svg id="map" width="500px" height="500px">
-	</svg>
-	<svg id="graph" width="500px" height="500px">
-		<text id='label' x='5' y='20'>Deaths per day</text>
-	</svg>
+	<div>
+		<svg id="map" width="500px" height="500px">
+		</svg>
+		<svg id="graph" width="500px" height="500px">
+			<text id='label' x='5' y='20'>Deaths per day</text>
+		</svg>
+	</div>
 
 	
 	<script type="text/javascript">
@@ -307,11 +309,11 @@
 				.attr("id", function(d) { return d.deathdate; })
 				.attr("class", "deathhoverbar")
 				.on("mouseover", function(d) {
-					// Seems like D3 should provide a filter for this, but
-					// who has time to figure that out?
-					for (let i=deathDays.length-1;i > d.day;i--) {
-						map.selectAll(".deathday" + i).attr("visibility","hidden");
-					}
+					d3.selectAll('.death')
+						.filter(function(d2) {
+							return d2.deathday > d.day;
+						})
+						.attr('visibility','hidden');
 				})
 				.on("mouseout", function(d) {
 					map.selectAll(".death").attr("visibility","visible");
