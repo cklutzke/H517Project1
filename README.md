@@ -11,6 +11,7 @@ Address all the TODO items
 Document the following on the ABOUT page:
 	Your design process: How did you go about designing the visualization? What are some of the initial designs / ideas you attempted in the beginning? A good way to document your design process is to scan your sketches and include them in the documentation page.
 		Iterative design: Draw map, draw graph, make graph interactive by date, add gender data, add age data
+		Tried to use scale bands for the hover bars but it wouldn't center them correctly.
 	Rationale of your design choices: This should be a rigorous explanation of the design choices you made. For example, why did you use color to encode a particular variable? Why did you arrange your charts in a particular way?
 	Describe how you used your visualizations to discover facts or answer questions you had. Include evidence to support your findings as screenshots from the visualization. In this case, we have a clear hypothesis to start with, but are there other nuggets of insights one can uncover?
 

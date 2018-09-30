@@ -42,6 +42,11 @@
 			stroke: none;
 		}
 		
+		svg .graphbuttonlabel {
+			font-family: 'Arial';
+			font-size: 15px;
+		}
+		
 		.axis path,
 		.axis line {
 			fill: none;
@@ -86,10 +91,10 @@
 	
 	<script type="text/javascript">
 	
-		// TODO: Can I make the size of the SVGs responsive?
-		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
+		// TODO: (Maybe) Can I make the size of the SVGs responsive?
 	
 		let map = d3.select("svg#map");
+		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
 		let mapWidth = parseInt(map.style("width"));
 		let mapHeight = parseInt(map.style("height"));
 		let mapXScale = d3.scale.linear();
@@ -283,20 +288,17 @@
 		function drawDeathsGraph() {
 
 			// Create hover bars
-			// TODO: CENTER the hoverbars over each point.
-			let graphXScaleBand = d3.scale.ordinal()
-				.domain(d3.range(deathDays.length))
-				.rangeBands([padding, graphWidth - padding], 0);
+			let hoverbarWidth = graphWidth / (deathDays.length - 1);
 
 			graph.selectAll("rect.deathhoverbar")
 				.data(deathDays)
 				.enter()
 				.append("rect")
 				.attr("x", function(d, i) {
-					return graphXScaleBand(i);
+					return graphXScale(i) - hoverbarWidth / 2;
 				})
 				.attr("y", padding)
-				.attr("width", graphXScaleBand.rangeBand())
+				.attr('width', hoverbarWidth)
 				.attr("height", graphHeight - padding * 2)
 				.attr("fill", "black")
 				.attr("fill-opacity", "0")
@@ -321,10 +323,12 @@
 				});
 				
 			// Draw the axes.
-			// TODO: Label the X axis by date, not # of days.
 			let xAxis = d3.svg.axis()
 				.scale(graphXScale)
 				.orient('bottom')
+				.tickFormat(function(d) {
+					return deathDays[d].deathdate;
+				});
 
 			let yAxis = d3.svg.axis()
 				.scale(graphYScale)
@@ -341,7 +345,6 @@
 				.call(yAxis);
 				
 			// Draw the buttons.
-			// TODO: Reconsider this value after fixing the font size.
 			let buttonLabelYAdjust = 5;
 			
 			// Total Deaths
@@ -562,6 +565,8 @@
 						.range([padding, graphWidth - padding]);
 					graphYScale.domain([0, maxDeaths])
 						.range([graphHeight - padding, padding]);
+						
+					// TODO: (Maybe) Can I change the Y scale for the different modes?
 					
 					drawDeathsMap();
 					drawDeathsGraphLines();
@@ -648,7 +653,6 @@
 		d3.json("streets.json", function(data) {
 			streets = data;
 		
-			// TODO: Scale the map to fill its SVG space.
 			mapXScale.domain([3,20]).range([0, mapWidth]);
 			mapYScale.domain([3,20]).range([mapHeight, 0]);
 			

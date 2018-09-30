@@ -19,6 +19,7 @@
 .pagebutton {
 	background-color: steelblue;
 	color: white;
+	font-family: 'Arial';
 	font-size: 15px;
 	padding: 8px;
 	border: none;
