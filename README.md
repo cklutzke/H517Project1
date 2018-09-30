@@ -3,10 +3,6 @@ Project 1 for my H517 Data Visualization class at IUPUI
 http://vis.ninja/teaching/2018/H517/project1/
 
 TODO:
-Address all the TODO items
-			
-Add dotted line with baseline death rates for comparison.
-
 Select a diverging color for the age chart.
 
 Document the following on the ABOUT page:
@@ -21,6 +17,11 @@ Document the following on the ABOUT page:
 A 2-4 minutes YouTube video showing the use of your visualization with narration. This video should be embedded in your documentation page. The video should be created using a screen-capture tool while interacting with the visualization. It should ideally be similar in style to the videos that accompany papers at the IEEE VIS or ACM CHI conferences. Here are a couple of good examples: UpSet, and GPLOM
 
 Upload the application to my website.
+
+IF THERE IS TIME
+Change the Y scale for the different modes.
+Add dotted line with baseline death rates for comparison.
+It would be nice if, below a certain width, the graph dropped below the map.
 
 FOR AN A YOU NEED TO ADD:
 	ability to zoom in/out and pan around the map

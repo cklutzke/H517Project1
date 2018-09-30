@@ -63,7 +63,7 @@
 	</style>
 </head>
 <body>
-	<div style='max-width: 1000px'>
+	<div>
 		<div class="pagetitle" style="float: left;">Cholera Outbreak: London, 1854</div>
 		<div style="float: right;">
 			<form>
@@ -81,24 +81,21 @@
 			Street. This data visualization is inspired by his work.
 			</p>
 		</div>
-	</div>
-	<div>
-		<svg id="map" width="500px" height="500px">
+		<svg id="map" width="49%" viewBox="0 0 500 500">
 		</svg>
-		<svg id="graph" width="500px" height="500px">
+		<svg id="graph" width="49%" viewBox="0 0 500 500">
 			<text id='label' x='5' y='20'>Deaths per day</text>
 		</svg>
 	</div>
 
 	
 	<script type="text/javascript">
-	
-		// TODO: (Maybe) Can I make the size of the SVGs responsive?
+		const SIZE = 500;
+		let padding = 30;
 	
 		let map = d3.select("svg#map");
-		// NOTE: parseInt strips off "px", but won't work if the size is set by percentage.
-		let mapWidth = parseInt(map.style("width"));
-		let mapHeight = parseInt(map.style("height"));
+		let mapWidth = SIZE;
+		let mapHeight = SIZE;
 		let mapXScale = d3.scale.linear();
 		let mapYScale = d3.scale.linear();
 		
@@ -106,12 +103,11 @@
 		let buttonPadding = 10;
 		
 		let graph = d3.select("svg#graph");
-		let graphWidth = parseInt(graph.style("width"));
-		let graphHeight = parseInt(graph.style("height")) - 
+		let graphWidth = SIZE;
+		let graphHeight = SIZE - 
 			(buttonHeight + buttonPadding * 2);
 		let graphXScale = d3.scale.linear();
 		let graphYScale = d3.scale.linear();
-		let padding = 30;
 		
 		let buttonWidth = (graphWidth - 4 * buttonPadding) / 3;
 		let keyButtonWidth = buttonWidth / 2;
@@ -568,8 +564,6 @@
 					graphYScale.domain([0, maxDeaths])
 						.range([graphHeight - padding, padding]);
 						
-					// TODO: (Maybe) Can I change the Y scale for the different modes?
-					
 					drawDeathsMap();
 					drawDeathsGraphLines();
 					drawDeathsGraph();
