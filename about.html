@@ -38,7 +38,6 @@
 					<li>I had one month to complete the project.</li>
 					<li>I had only three months of previous experience with JavaScript and CSS.</li>
 					<li>This was my first project with the D3 library.</li>
-					<li>I had to estimate the placement and rotation of the building and street labels.</li>
 				</ul>
 			</p>
 			<p>
@@ -58,6 +57,41 @@
 					style="width:500px"
 					/>
 			</a>
+		</div>
+		<div class="pagesubtitle">Design Process</div>
+		<div class="pagetext">
+			<p>
+				I developed the visualization iteratively. I started by rendering the map,
+				the pumps, and the death locations as the minimum viable product. The
+				instructor provided a detailed rubric for how the project would be graded,
+				and I added the graph and other features one by one according to those
+				requirements and as my time and expertise allowed.
+			</p>
+			<p>
+				I estimated the placement of the street and building labels by temporarily
+				adding an onclick event to the map. This logged the location of each click
+				for a starting estimate of the label placement. Afterward I commented out
+				the event.
+			</p>
+			<p>
+				The X scale of the graph was initially separate from an X rangeband scale
+				that I used to draw the gray hoverbars. However, I couldn't get the bars to
+				center over the drawn datapoints, probably due to rounding. I finally
+				figured out how to use the same X scale to place the hoverbars, which makes
+				much more sense than trying to keep a parallel scale in synch.
+			</p>
+			<p>
+				I asked two subjects to provide user testing for the visualization. All I
+				did was present them with the web page and ask them to interact with it.
+				This helped me improve the display and clarify the accompanying text. One
+				observation was that it is difficult to tell the different shades of green
+				on the By Age graph apart. I experimented with different color schemes,
+				but none of the alternatives seemed to be more clear. Categorical color
+				sets of six colors were not colorblind-safe, and didn't convey a sense of
+				increasing age. Diverging colorsets used pale colors in the mid-range,
+				which weren't visible against the white background. In the end I decided
+				that my initial green shading was as adequate a solution as I was likely
+				to find.
 		</div>
 	</div>
 </body>
