@@ -21,16 +21,10 @@
 		<div class="pagesubtitle">About this project</div>
 		<div class="pagetext">
 			<p>
-				This data visualization was created by Carl Klutzke as an assignment for H517:
-				"Visualization Design, Analysis, & Evaluation" at IUPUI in Fall 2018, taught by
-				Dr. Khairi Reda. The purpose of the assignment was to reproduce Dr. John Snow's
-				outbreak map (depicted below) as an interactive visualization using JavaScript
-				and the D3 data visualization library.
+				This data visualization was created by Carl Klutzke as an assignment for H517: "Visualization Design, Analysis, & Evaluation" at IUPUI in Fall 2018, taught by Dr. Khairi Reda. The purpose of the assignment was to reproduce Dr. John Snow's outbreak map (depicted below) as an interactive visualization using JavaScript and the D3 data visualization library.
 			</p>
 			<p>
-				The street diagrams, pump locations, and death locations were provided as part
-				of the assignment. The instructor also provided fictional demographic data
-				for each death.
+				The street diagrams, pump locations, and death locations were provided as part of the assignment. The instructor also provided fictional demographic data for each death.
 			</p>
 			<p>
 				To complete this assignment, I had to overcome the following challenges:
@@ -41,14 +35,10 @@
 				</ul>
 			</p>
 			<p>
-				For more on the 1854 Broad Street cholera outbreak, and Dr. John Snow's groundbreaking
-				work in germ theory, epidemiology, and data visualization, see
-				<a href="https://en.wikipedia.org/wiki/1854_Broad_Street_cholera_outbreak">
-				this article</a> on Wikipedia.
+				For more on the 1854 Broad Street cholera outbreak, and Dr. John Snow's groundbreaking work in germ theory, epidemiology, and data visualization, see <a href="https://en.wikipedia.org/wiki/1854_Broad_Street_cholera_outbreak"> this article</a> on Wikipedia.
 			</p>
 			<p>
-				The source for this project is available on GitHub as
-				<a href="https://github.com/cklutzke/H517Project1">cklutzke/H517Project1</a>.
+				The source for this project is available on GitHub as <a href="https://github.com/cklutzke/H517Project1">cklutzke/H517Project1</a>.
 			</p>
 			<a href="https://en.wikipedia.org/wiki/File:Snow-cholera-map-1.jpg">
 				<img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Snow-cholera-map-1.jpg"
@@ -61,37 +51,20 @@
 		<div class="pagesubtitle">Design Process</div>
 		<div class="pagetext">
 			<p>
-				I developed the visualization iteratively. I started by rendering the map,
-				the pumps, and the death locations as the minimum viable product. The
-				instructor provided a detailed rubric for how the project would be graded,
-				and I added the graph and other features one by one according to those
-				requirements and as my time and expertise allowed.
+				I developed the visualization iteratively. I started by rendering the map, the pumps, and the death locations as the minimum viable product. The instructor provided a detailed rubric for how the project would be graded, and I added the graph and other features one by one according to those requirements and as my time and expertise allowed.
 			</p>
 			<p>
-				I estimated the placement of the street and building labels by temporarily
-				adding an onclick event to the map. This logged the location of each click
-				for a starting estimate of the label placement. Afterward I commented out
-				the event.
+				I estimated the placement of the street and building labels by temporarily 	adding an onclick event to the map. This logged the location of each click for a starting estimate of the label placement. Afterward I commented out the event.
 			</p>
 			<p>
-				The X scale of the graph was initially separate from an X rangeband scale
-				that I used to draw the gray hoverbars. However, I couldn't get the bars to
-				center over the drawn datapoints, probably due to rounding. I finally
-				figured out how to use the same X scale to place the hoverbars, which makes
-				much more sense than trying to keep a parallel scale in synch.
+				The X scale of the graph was initially separate from an X rangeband scale that I used to draw the gray hoverbars. However, I couldn't get the bars to center over the drawn datapoints, probably due to rounding. I finally figured out how to use the same X scale to place the hoverbars, which makes much more sense than trying to keep parallel scales in synch.
 			</p>
 			<p>
-				I asked two subjects to provide user testing for the visualization. All I
-				did was present them with the web page and ask them to interact with it.
-				This helped me improve the display and clarify the accompanying text. One
-				observation was that it is difficult to tell the different shades of green
-				on the By Age graph apart. I experimented with different color schemes,
-				but none of the alternatives seemed to be more clear. Categorical color
-				sets of six colors were not colorblind-safe, and didn't convey a sense of
-				increasing age. Diverging colorsets used pale colors in the mid-range,
-				which weren't visible against the white background. In the end I decided
-				that my initial green shading was as adequate a solution as I was likely
-				to find.
+				I asked two subjects to provide user testing for the visualization. I simply presented them with the web page and ask them to interact with it. The resulting observations helped me improve the display and clarify the accompanying text.
+			</p>
+			<p>
+				One of the user test observations was that it is difficult to tell the different shades of green on the By Age graph apart. I experimented with different color schemes, but none of the alternatives seemed to be more clear. Categorical color sets of six colors were not colorblind-safe, and didn't convey a sense of increasing age. Diverging colorsets used pale colors in the mid-range, which weren't visible against the white background. In the end I decided that my initial green shading was as adequate a solution as I was likely to find.
+			</p>
 		</div>
 	</div>
 </body>

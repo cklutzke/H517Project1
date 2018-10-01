@@ -13,7 +13,6 @@ Upload the application to my website.
 IF THERE IS TIME
 Change the Y scale for the different modes.
 Add dotted line with baseline death rates for comparison.
-It would be nice if, below a certain width, the graph dropped below the map.
 
 FOR AN A YOU NEED TO ADD:
 	ability to zoom in/out and pan around the map
